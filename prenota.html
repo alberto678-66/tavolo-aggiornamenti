@@ -96,7 +96,7 @@ textarea{min-height:64px;resize:vertical}
 <script>
 "use strict";
 const L={
- it:{sub:"Prenota un tavolo",giorno:"Giorno",ora:"Orario",pers:"Persone",pers1:"persona",persN:"persone",dati:"I tuoi dati",nome:"Nome e cognome",tel:"Telefono",telH:"Ti serve per il promemoria e per essere contattato dal locale",note:"Note (facoltativo)",noteP:"Allergie, seggiolone, un compleanno…",acc:"Serve un tavolo accessibile (sedia a rotelle)",priv:"Il locale usa nome e telefono solo per gestire questa prenotazione.",pranzo:"Pranzo",cena:"Cena",nessuno:"Nessun orario libero in questo giorno: scegline un altro.",scegli:"Scegli giorno e orario",prenota:"Prenota",invio:"Invio…",
+ it:{sub:"Prenota un tavolo",giorno:"Giorno",ora:"Orario",pers:"Persone",pers1:"persona",persN:"persone",dati:"I tuoi dati",nome:"Nome e cognome",tel:"Telefono",telH:"Ti serve per il promemoria e per essere contattato dal locale",note:"Note (facoltativo)",noteP:"Allergie, seggiolone, un compleanno…",acc:"Serve un tavolo accessibile (sedia a rotelle)",priv:"Ho letto l'informativa privacy: il locale usa nome e telefono solo per gestire questa prenotazione.",privL:"Leggi l'informativa privacy",cookieL:"Cookie",sal:"Acconsento che il locale usi le informazioni su allergie, intolleranze o accessibilità che ho scritto, solo per questa prenotazione (facoltativo: serve solo se le scrivi).",eSal:"Hai scritto allergie o esigenze di accessibilità: spunta il consenso per quei dati, oppure toglile.",pranzo:"Pranzo",cena:"Cena",nessuno:"Nessun orario libero in questo giorno: scegline un altro.",scegli:"Scegli giorno e orario",prenota:"Prenota",invio:"Invio…",
   ricevuta:"Prenotazione ricevuta",ricevutaP:"Il locale la vede già: non serve chiamare.",confermata:"Hai confermato",confermataP:"Ti aspettiamo. Se cambia qualcosa puoi ancora disdire.",disdetta:"Prenotazione disdetta",disdettaP:"Grazie per averlo detto: il tavolo è stato liberato.",annullata:"Il locale ha annullato la prenotazione",annullataP:"Per sapere perché, chiama il locale.",arrivato:"Buon appetito!",arrivatoP:"Sei già al tavolo.",inviata:"Prenotazione inviata",inviataP:"Il locale la sta registrando: tra meno di un minuto la vedi confermata qui.",rifiutata:"Il locale non ha potuto registrarla",rif_orario:"Quell'orario non è disponibile: prova con un altro.",rif_doppia:"Hai già una prenotazione per quel giorno.",rif_dati:"Controlla nome, telefono e persone e riprova.",rif_troppe:"In questo momento arrivano troppe prenotazioni: riprova tra poco o chiama il locale.",rif_chiuso:"Le prenotazioni online ora non sono attive. Chiama il locale.",rif_x:"Riprova o chiama il locale.",
   quando:"Quando",chi:"A nome di",quanti:"Persone",tavAcc:"tavolo accessibile",
   chiede:"È quasi ora: confermi che arrivi?",chiedeP:"Se non riesci, disdici: il tavolo va a qualcun altro.",si:"Sì, arrivo",no:"Non riesco, disdico",
@@ -106,7 +106,7 @@ const L={
   presto:"Puoi confermare da un'ora prima.",chiusaE:"La prenotazione non è più modificabile.",rete:"Il locale non risponde. Riprova tra poco.",chiusoE:"Le prenotazioni online ora non sono attive. Chiama il locale.",codice:"Questo link non è valido.",
   eNome:"Scrivi nome e cognome.",eTel:"Scrivi un numero di telefono valido.",ePers:"Per gruppi più grandi chiama il locale.",eOra:"Quell'orario non è più disponibile: scegline un altro.",ePriv:"Spunta la casella per continuare.",eDoppia:"Hai già una prenotazione per quel giorno.",
   demoT:"Demo: per non aspettare l'ora vera, prova adesso la conferma.",demoB:"Simula: manca un'ora",oggi:"Oggi",domani:"Domani",alle:"alle",calTit:"Tavolo da {n}",calDesc:"Prenotazione per {p}. Confermala o disdicila qui: {u}",notTit:"Tra un'ora hai il tavolo da {n}",notBody:"Alle {o}, {p}. Tocca per confermare."},
- en:{sub:"Book a table",giorno:"Day",ora:"Time",pers:"Guests",pers1:"guest",persN:"guests",dati:"Your details",nome:"Full name",tel:"Phone",telH:"Used for the reminder and so the restaurant can reach you",note:"Notes (optional)",noteP:"Allergies, high chair, a birthday…",acc:"I need an accessible table (wheelchair)",priv:"The restaurant uses your name and phone only to manage this booking.",pranzo:"Lunch",cena:"Dinner",nessuno:"No free times on this day: pick another one.",scegli:"Pick a day and time",prenota:"Book",invio:"Sending…",
+ en:{sub:"Book a table",giorno:"Day",ora:"Time",pers:"Guests",pers1:"guest",persN:"guests",dati:"Your details",nome:"Full name",tel:"Phone",telH:"Used for the reminder and so the restaurant can reach you",note:"Notes (optional)",noteP:"Allergies, high chair, a birthday…",acc:"I need an accessible table (wheelchair)",priv:"I have read the privacy notice: the restaurant uses your name and phone only to manage this booking.",privL:"Read the privacy notice",cookieL:"Cookies",sal:"I agree that the restaurant may use the allergy, intolerance or accessibility details I wrote, only for this booking (optional: needed only if you write them).",eSal:"You wrote allergies or accessibility needs: tick the consent for that information, or remove it.",pranzo:"Lunch",cena:"Dinner",nessuno:"No free times on this day: pick another one.",scegli:"Pick a day and time",prenota:"Book",invio:"Sending…",
   ricevuta:"Booking received",ricevutaP:"The restaurant already sees it: no need to call.",confermata:"You confirmed",confermataP:"See you soon. If plans change you can still cancel.",disdetta:"Booking cancelled",disdettaP:"Thanks for letting us know: the table is free again.",annullata:"The restaurant cancelled this booking",annullataP:"Please call the restaurant to find out why.",arrivato:"Enjoy your meal!",arrivatoP:"You are already at the table.",inviata:"Booking sent",inviataP:"The restaurant is registering it: within a minute you will see it confirmed here.",rifiutata:"The restaurant could not register it",rif_orario:"That time is not available: try another one.",rif_doppia:"You already have a booking on that day.",rif_dati:"Check name, phone and guests and try again.",rif_troppe:"Too many bookings right now: try again shortly or call the restaurant.",rif_chiuso:"Online booking is not available right now. Please call the restaurant.",rif_x:"Try again or call the restaurant.",
   quando:"When",chi:"Name",quanti:"Guests",tavAcc:"accessible table",
   chiede:"Almost time: are you coming?",chiedeP:"If you can't make it, cancel so the table goes to someone else.",si:"Yes, I'm coming",no:"I can't, cancel",
@@ -136,6 +136,7 @@ const PUSH_OK=()=>MODO==="fb"&&INFO&&INFO.vapid&&"serviceWorker"in navigator&&"P
 let installa=null;addEventListener("beforeinstallprompt",e=>{e.preventDefault();installa=e;if(INFO)disegna()});
 if("serviceWorker"in navigator&&TAVOLO_FB&&location.protocol==="https:")navigator.serviceWorker.register("prenota-sw.js").catch(()=>{});
 const MODO=LID&&TAVOLO_FB?"fb":"api";
+const urlDoc=d=>MODO==="fb"?`${d}.html?l=${encodeURIComponent(LID)}&lang=${lang}`:`/${d}.html`;
 const FSB=TAVOLO_FB?`https://firestore.googleapis.com/v1/projects/${TAVOLO_FB.progetto}/databases/(default)/documents`:"";
 const fbEnc=v=>typeof v==="boolean"?{booleanValue:v}:Number.isInteger(v)?{integerValue:String(v)}:{stringValue:String(v??"")};
 const fbDec=f=>{const o={};for(const[k,v]of Object.entries(f||{}))o[k]="integerValue"in v?+v.integerValue:"booleanValue"in v?v.booleanValue:"timestampValue"in v?v.timestampValue:"arrayValue"in v?(v.arrayValue.values||[]).map(x=>fbDec({x}).x):v.stringValue??null;return o};
@@ -150,7 +151,8 @@ const BE={
   async nuova(x){if(MODO==="api")return chiedi("/api/prenota/nuova",x);
     const a=new Uint8Array(18);crypto.getRandomValues(a);const id=btoa(String.fromCharCode(...a)).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
     const campi={nome:x.nome.slice(0,50),tel:x.tel.slice(0,20),data:x.data,ora:x.ora,persone:x.persone,note:String(x.note||"").slice(0,160),acc:!!x.acc,stato:"nuova",conf:"attesa"};
-    try{await fbChiedi(`${FSB}:commit`,{writes:[{update:{name:fbNome(id),fields:Object.fromEntries(Object.entries(campi).map(([k,v])=>[k,fbEnc(v)]))},updateTransforms:[{fieldPath:"agg",setToServerValue:"REQUEST_TIME"},{fieldPath:"creata",setToServerValue:"REQUEST_TIME"}],currentDocument:{exists:false}}]})}
+    const scrivi=c=>fbChiedi(`${FSB}:commit`,{writes:[{update:{name:fbNome(id),fields:Object.fromEntries(Object.entries(c).map(([k,v])=>[k,fbEnc(v)]))},updateTransforms:[{fieldPath:"agg",setToServerValue:"REQUEST_TIME"},{fieldPath:"creata",setToServerValue:"REQUEST_TIME"}],currentDocument:{exists:false}}]});
+    try{try{await scrivi(Object.assign({priv:x.privacy===true,sal:x.salute===true},campi))}catch(e){if(e.codice!=="negato")throw e;await scrivi(campi)}}
     catch(e){if(e.codice==="negato")e.codice="orario";throw e}
     return{id,k:"",pren:vistaFb(id,campi)}},
   async push(sub){await fbChiedi(`${FSB}:commit`,{writes:[{update:{name:fbNome(PID),fields:{push:fbEnc(JSON.stringify(sub))}},updateMask:{fieldPaths:["push"]},updateTransforms:[{fieldPath:"agg",setToServerValue:"REQUEST_TIME"}]}]})},
@@ -196,7 +198,7 @@ function vistaForm(){
   const gg=giorni();if(!sel.g||!gg.includes(sel.g)){sel.g=gg[0]||null;sel.o=null}
   const fasce=sel.g?slotsDi(sel.g):[];if(sel.o&&!fasce.some(f=>f.list.includes(sel.o)))sel.o=null;
   const loc=lang==="en"?"en-GB":"it-IT",m=mie().filter(x=>x.data>=dkey(adesso()));
-  const v=id=>$(id)?$(id).value:"";const bozza={n:v("fNome"),t:v("fTel"),no:v("fNote"),a:$("fAcc")?$("fAcc").checked:false,pv:$("fPriv")?$("fPriv").checked:false};
+  const v=id=>$(id)?$(id).value:"";const bozza={n:v("fNome"),t:v("fTel"),no:v("fNote"),a:$("fAcc")?$("fAcc").checked:false,pv:$("fPriv")?$("fPriv").checked:false,sa:$("fSal")?$("fSal").checked:false};
   $("m").innerHTML=`${m.length?`<h2>${esc(t("mie"))}</h2><div class="mie">${m.map(x=>`<a href="?${LID?"l="+encodeURIComponent(LID)+"&":""}p=${encodeURIComponent(x.id)}${x.k?"&k="+encodeURIComponent(x.k):""}"><span>${esc(giornoLungo(x.data))}</span><b>${esc(x.ora)}</b></a>`).join("")}</div>`:""}
   <h2>${esc(t("giorno"))}</h2><div class="pills" role="group" aria-label="${esc(t("giorno"))}">${gg.map(d=>{const x=new Date(d+"T12:00");return`<button class="day" data-g="${d}" aria-pressed="${d===sel.g}"><small>${esc(x.toLocaleDateString(loc,{weekday:"short"}).replace(".",""))}</small><b>${x.getDate()}</b><small>${esc(x.toLocaleDateString(loc,{month:"short"}).replace(".",""))}</small></button>`}).join("")}</div>
   <h2>${esc(t("pers"))}</h2><div class="stepper"><button data-p="-1" aria-label="−" ${sel.p<=1?"disabled":""}>−</button><b>${sel.p}</b><button data-p="1" aria-label="+" ${sel.p>=INFO.max?"disabled":""}>+</button><span>${esc(+sel.p===1?t("pers1"):t("persN"))}</span></div>
@@ -208,21 +210,23 @@ function vistaForm(){
    <label for="fNote">${esc(t("note"))}<textarea id="fNote" maxlength="160" placeholder="${esc(t("noteP"))}">${esc(bozza.no)}</textarea></label>
    <label class="check"><input type="checkbox" id="fAcc" ${bozza.a?"checked":""}> ♿ ${esc(t("acc"))}</label>
    <label class="check"><input type="checkbox" id="fPriv" ${bozza.pv?"checked":""}> ${esc(t("priv"))}</label>
+   <div class="note" style="margin:-4px 0 4px 30px"><a href="${esc(urlDoc("privacy"))}" target="_blank" rel="noopener">${esc(t("privL"))}</a> · <a href="${esc(urlDoc("cookie"))}" target="_blank" rel="noopener">${esc(t("cookieL"))}</a></div>
+   <label class="check"><input type="checkbox" id="fSal" ${bozza.sa?"checked":""}> ${esc(t("sal"))}</label>
    ${err?`<div class="err" role="alert">${esc(err)}</div>`:""}</div>`;
   $("bar").hidden=false;$("riass").textContent=sel.g&&sel.o?`${giornoLungo(sel.g)} ${t("alle")} ${sel.o} · ${persTxt(sel.p)}`:t("scegli");
   const b=$("vai");b.className="big";b.textContent=inviando?t("invio"):t("prenota");b.disabled=!(sel.g&&sel.o)||inviando;
 }
 async function invia(){
   if(inviando)return;err="";const nome=$("fNome").value.trim(),tel=$("fTel").value.trim();
-  if(nome.length<2)err=t("eNome");else if(tel.replace(/\D/g,"").length<8)err=t("eTel");else if(!$("fPriv").checked)err=t("ePriv");
+  if(nome.length<2)err=t("eNome");else if(tel.replace(/\D/g,"").length<8)err=t("eTel");else if(!$("fPriv").checked)err=t("ePriv");else if(($("fNote").value.trim()||$("fAcc").checked)&&!$("fSal").checked)err=t("eSal");
   if(err){vistaForm();return}
   inviando=true;vistaForm();
-  try{const j=await BE.nuova({nome,tel,data:sel.g,ora:sel.o,persone:sel.p,note:$("fNote").value,acc:$("fAcc").checked,privacy:true});
+  try{const j=await BE.nuova({nome,tel,data:sel.g,ora:sel.o,persone:sel.p,note:$("fNote").value,acc:$("fAcc").checked,privacy:true,salute:$("fSal").checked});
     store.set("tavolo-prenota-nome",nome);store.set("tavolo-prenota-tel",tel);
     PID=j.id;PK=j.k;P=j.pren;salvaMia({id:j.id,k:j.k,data:sel.g,ora:sel.o});
     try{history.replaceState(null,"",linkMio())}catch(e){}
     inviando=false;window.scrollTo(0,0);disegna();
-  }catch(e){inviando=false;err={nome:t("eNome"),tel:t("eTel"),persone:t("ePers"),orario:t("eOra"),privacy:t("ePriv"),doppia:t("eDoppia"),chiuso:t("chiusoE")}[e.codice]||t("rete");if(e.codice==="orario")sel.o=null;vistaForm()}
+  }catch(e){inviando=false;err={nome:t("eNome"),tel:t("eTel"),persone:t("ePers"),orario:t("eOra"),privacy:t("ePriv"),salute:t("eSal"),doppia:t("eDoppia"),chiuso:t("chiusoE")}[e.codice]||t("rete");if(e.codice==="orario")sel.o=null;vistaForm()}
 }
 
 /* ---------- la tua prenotazione ---------- */
@@ -310,5 +314,6 @@ document.addEventListener("click",async e=>{
 avvio();setInterval(aggiorna,15000);
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)aggiorna()});
 </script>
+<script src="consenso.js" defer></script>
 </body>
 </html>

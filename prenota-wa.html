@@ -64,9 +64,11 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-
     <label>Telefono<input type="tel" id="tel" autocomplete="tel" maxlength="20" placeholder="Per eventuali comunicazioni"></label>
     <label class="spunta"><input type="checkbox" id="acc"> Serve un tavolo accessibile (sedia a rotelle)</label>
     <label>Note<textarea id="nt" maxlength="160" placeholder="Allergie, seggiolone, un'occasione speciale…"></textarea></label>
+    <label class="spunta"><input type="checkbox" id="priv"> Ho letto l'<a href="privacy.html?n=${encodeURIComponent(nome)}" target="_blank" rel="noopener">informativa privacy</a>: il locale usa questi dati solo per gestire la prenotazione.</label>
+    <label class="spunta"><input type="checkbox" id="sal"> Acconsento che il locale usi le informazioni su allergie, intolleranze o accessibilità che scrivo, solo per questa prenotazione (serve solo se le scrivi).</label>
     <div class="err" id="err" role="alert"></div>
     <button class="invia" type="submit">Invia la richiesta su WhatsApp</button>
-    <p class="nota">La prenotazione è confermata quando il locale ti risponde. Nessun dato viene salvato su questa pagina.</p>
+    <p class="nota">La prenotazione è confermata quando il locale ti risponde. Nessun dato viene salvato su questa pagina. · <a href="cookie.html" target="_blank" rel="noopener">Cookie</a></p>
   </form>`;
   const $ = id => document.getElementById(id);
   const giorniNome = ["domenica", "lunedì", "martedì", "mercoledì", "giovedì", "venerdì", "sabato"];
@@ -85,16 +87,19 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-
     if (!controlla()) { $("err").textContent = "Quel giorno il locale è chiuso."; return; }
     if (!o) { $("err").textContent = "Scegli un orario."; return; }
     if (n.length < 2) { $("err").textContent = "Scrivi il tuo nome."; $("nm").focus(); return; }
+    if (!$("priv").checked) { $("err").textContent = "Spunta la casella dell'informativa privacy per continuare."; return; }
+    if (($("acc").checked || $("nt").value.trim()) && !$("sal").checked) { $("err").textContent = "Hai scritto allergie o esigenze di accessibilità: spunta il consenso per quei dati, oppure toglile."; return; }
     const d = new Date(g + "T12:00"), bello = `${giorniNome[d.getDay()]} ${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()}`;
     const righe = [`Ciao! Vorrei prenotare un tavolo da ${nome}.`, ``, `Nome: ${n}`, `Giorno: ${bello} (${g})`, `Ora: ${o}`, `Persone: ${persone}`];
     if ($("tel").value.trim()) righe.push(`Telefono: ${$("tel").value.trim()}`);
     if ($("acc").checked) righe.push(`Accessibilità: tavolo accessibile per sedia a rotelle`);
     if ($("nt").value.trim()) righe.push(`Note: ${$("nt").value.trim().replace(/\s+/g, " ")}`);
-    righe.push(``, `(richiesta dalla pagina Prenota)`);
+    righe.push(``, `(richiesta dalla pagina Prenota · informativa privacy letta${$("sal").checked ? " · consenso dati su allergie/accessibilità" : ""})`);
     const testo = righe.join("\n");
     location.href = "https://wa.me/" + wa + "?text=" + encodeURIComponent(testo);
   });
 })();
 </script>
+<script src="consenso.js" defer></script>
 </body>
 </html>

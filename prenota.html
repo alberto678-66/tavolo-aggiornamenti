@@ -2,99 +2,287 @@
 <html lang="it">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="icon" href="/icona.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/icona-180.png">
 <title>Prenota un tavolo</title>
-<meta name="robots" content="noindex">
 <style>
-:root{--accent:#2F6B4F;--bg:#F4F6F3;--fg:#18201B;--muted:#5B665E;--line:#D9DED8;--card:#FFFFFF;--crit:#A33A2B}
-@media (prefers-color-scheme:dark){:root{--bg:#121613;--fg:#E9EEEA;--muted:#A3ADA6;--line:#2C342E;--card:#1A201C}}
+/* Layout: una colonna da telefono, come la pagina "ordina" del cliente; scelte a pillole, barra fissa in basso col pulsante principale. */
+:root{--accent:#2F6B4F;--accent-soft:#DCEBE2;--bg:#F6F4EF;--card:#FFFFFF;--ink:#1E2420;--mut:#5F6862;--line:#E2DFD6;--crit:#B3402F;--crit-soft:#F6DCD6;--warn:#9A5A0C;--warn-soft:#F7E6CF;--ok:#2F6B4F;
+  --f:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;--f-num:ui-rounded,"SF Pro Rounded","Segoe UI Variable Display",system-ui,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--accent-soft:#22392C;--bg:#141714;--card:#1D211E;--ink:#E9ECE8;--mut:#9BA49E;--line:#2D332F;--crit:#F08F7E;--crit-soft:#3B211C;--warn:#E3A04F;--warn-soft:#3A2C18;--ok:#7CC39E;color-scheme:dark}}
+:root[data-theme="dark"]{--accent-soft:#22392C;--bg:#141714;--card:#1D211E;--ink:#E9ECE8;--mut:#9BA49E;--line:#2D332F;--crit:#F08F7E;--crit-soft:#3B211C;--warn:#E3A04F;--warn-soft:#3A2C18;--ok:#7CC39E;color-scheme:dark}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:24px 16px calc(32px + env(safe-area-inset-bottom,0px))}
-main{max-width:440px;margin:0 auto;display:grid;gap:18px}
-header{text-align:center;display:grid;gap:6px}
-.logo{width:52px;height:52px;border-radius:14px;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:800;font-size:26px;margin:0 auto}
-h1{font-size:26px;line-height:1.15;margin:4px 0 0;letter-spacing:-.01em}
-.sub{color:var(--muted);font-size:15px}
-form{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;display:grid;gap:14px}
-label{display:grid;gap:6px;font-size:14px;font-weight:600}
-input,select,textarea{font:inherit;font-weight:400;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:11px 12px;width:100%;min-height:46px}
-textarea{min-height:70px;resize:vertical}
-input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
-.due{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.pers{display:flex;align-items:center;gap:10px}
-.pers button{width:46px;height:46px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--fg);font-size:22px;cursor:pointer}
-.pers output{min-width:48px;text-align:center;font-size:22px;font-weight:700;font-variant-numeric:tabular-nums}
-.invia{background:var(--accent);color:#fff;border:0;border-radius:12px;padding:15px;font:inherit;font-weight:700;font-size:17px;cursor:pointer}
-.nota{color:var(--muted);font-size:13.5px;text-align:center}
-.err{color:var(--crit);font-size:14px;min-height:1em}
-.chiuso{color:var(--crit);font-size:13.5px;font-weight:400}
-.vuoto{text-align:center;color:var(--muted);padding:40px 0}
-.spunta{display:flex;align-items:center;gap:10px;font-weight:500}
-.spunta input{width:22px;height:22px;min-height:0;accent-color:var(--accent)}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 var(--f);-webkit-text-size-adjust:100%}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:14px 10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));border-bottom:1px solid var(--line)}
+.top{display:flex;align-items:center;gap:10px;justify-content:space-between;max-width:640px;margin:0 auto}
+h1{font-size:20px;margin:0;line-height:1.2;text-wrap:balance}
+.sub{color:var(--mut);font-size:13.5px}
+.lang{display:inline-flex;border:1px solid var(--line);border-radius:99px;overflow:hidden;flex:none}
+.lang button{border:0;background:var(--card);padding:5px 10px;font-size:13px;font-weight:600}
+.lang button[aria-pressed=true]{background:var(--ink);color:var(--bg)}
+main{padding-block:6px 150px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));max-width:640px;margin:0 auto}
+h2{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--mut);margin:22px 0 8px;font-weight:600}
+.pills{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.pills::-webkit-scrollbar{display:none}
+.day{flex:0 0 auto;border:1px solid var(--line);background:var(--card);border-radius:14px;padding:8px 0;width:58px;display:grid;justify-items:center;gap:1px}
+.day small{font-size:11.5px;color:var(--mut);text-transform:uppercase;letter-spacing:.04em}
+.day b{font-family:var(--f-num);font-size:20px;line-height:1.1}
+.day[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:#fff}
+.day[aria-pressed=true] small{color:#fff;opacity:.85}
+.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(74px,1fr));gap:6px}
+.slot{border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 0;font-variant-numeric:tabular-nums;font-weight:600}
+.slot[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:#fff}
+.fascia{font-size:12.5px;color:var(--mut);margin:10px 0 6px}
+.stepper{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:8px 10px;width:max-content}
+.stepper button{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--bg);font-size:21px;line-height:1;display:grid;place-items:center}
+.stepper button:disabled{opacity:.35;cursor:not-allowed}
+.stepper b{font-family:var(--f-num);font-size:22px;min-width:28px;text-align:center}
+.stepper span{color:var(--mut);font-size:14px;padding-right:6px}
+.fields{display:grid;gap:10px}
+.fields label{display:grid;gap:4px;font-size:14px;font-weight:600}
+.fields input[type=text],.fields input[type=tel],textarea{width:100%;border:1px solid var(--line);border-radius:12px;padding:11px 12px;background:var(--card);font-weight:400;font-size:16px}
+textarea{min-height:64px;resize:vertical}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:14px;font-weight:400!important;color:var(--ink)}
+.check input{width:20px;height:20px;margin:1px 0 0;accent-color:var(--accent);flex:none}
+.err{color:var(--crit);font-size:13.5px;font-weight:600}
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:6;padding-top:10px;padding-bottom:calc(10px + env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));background:var(--bg);border-top:1px solid var(--line)}
+.bar .in{max-width:640px;margin:0 auto;display:grid;gap:6px}
+.riass{font-size:13.5px;color:var(--mut);text-align:center;min-height:19px}
+.big{width:100%;border:0;border-radius:14px;padding:14px;font-weight:700;background:var(--accent);color:#fff;font-size:16.5px}
+.big:disabled{opacity:.45;cursor:not-allowed}
+.big.no{background:var(--card);color:var(--crit);border:1.5px solid var(--crit)}
+.ghost{border:1px solid var(--line);background:var(--card);border-radius:12px;padding:11px 12px;font-size:14.5px;text-decoration:none;color:var(--ink);text-align:center;display:block;font-weight:600}
+.lnk{background:none;border:0;color:var(--mut);text-decoration:underline;font-size:14px;padding:6px 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;display:grid;gap:12px;margin-top:16px}
+.stato{display:flex;gap:12px;align-items:center}
+.ico{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-size:22px;flex:none;background:var(--accent-soft);color:var(--ok);font-weight:700}
+.ico.warn{background:var(--warn-soft);color:var(--warn)}
+.ico.no{background:var(--crit-soft);color:var(--crit)}
+.stato h3{margin:0;font-size:19px;line-height:1.25;text-wrap:balance}
+.stato p{margin:2px 0 0;color:var(--mut);font-size:14px}
+.det{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:15px;border-top:1px solid var(--line);padding-top:12px}
+.det dt{color:var(--mut)}
+.det dd{margin:0;font-weight:600;font-variant-numeric:tabular-nums}
+.quando{font-family:var(--f-num);font-size:28px;font-weight:700;line-height:1.1;font-variant-numeric:tabular-nums}
+.ask{background:var(--warn-soft);border-radius:14px;padding:14px;display:grid;gap:10px}
+.ask b{color:var(--warn)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.note{font-size:13px;color:var(--mut)}
+.conf{border:1px solid var(--line);border-radius:14px;padding:12px;display:grid;gap:8px;background:var(--bg)}
+.chiuso{text-align:center;padding:60px 20px;color:var(--mut)}
+.mie{display:grid;gap:6px;margin-top:8px}
+.mie a{display:flex;justify-content:space-between;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;color:var(--ink);text-decoration:none;font-size:14.5px}
+.toast{position:fixed;left:50%;bottom:calc(130px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-size:14.5px;z-index:20;max-width:90vw;text-align:center}
+.demo{border:1px dashed var(--line);border-radius:12px;padding:10px 12px;font-size:13px;color:var(--mut)}
+.demo button{margin-top:6px}
+@media (prefers-reduced-motion:no-preference){.card{animation:su .25s ease-out}@keyframes su{from{transform:translateY(6px)}to{transform:none}}}
 </style>
 </head>
 <body>
-<main id="app"><p class="vuoto">Caricamento…</p></main>
+<header><div class="top"><div style="min-width:0"><h1 id="nome">Prenota</h1><div class="sub" id="sub"></div></div><div class="lang" role="group" aria-label="Lingua"><button data-l="it" aria-pressed="true">IT</button><button data-l="en" aria-pressed="false">EN</button></div></div></header>
+<main id="m"><p class="chiuso">…</p></main>
+<div class="bar" id="bar" hidden><div class="in"><div class="riass" id="riass"></div><button class="big" id="vai" disabled></button></div></div>
+<div class="toast" id="toast" hidden></div>
 <script>
 "use strict";
-(function(){
-  const q = new URLSearchParams(location.search);
-  const nome = (q.get("n") || "").slice(0, 60), wa = (q.get("w") || "").replace(/\D/g, ""), max = Math.min(50, Math.max(1, parseInt(q.get("m"), 10) || 10));
-  const chiusi = (q.get("c") || "").split(",").filter(x => /^[0-6]$/.test(x)).map(Number);
-  const fasce = (q.get("o") || "12:30-14:30,19:30-23:00").split(",").map(f => f.trim().match(/^(\d{2}):(\d{2})-(\d{2}):(\d{2})$/)).filter(Boolean);
-  const acc = (q.get("a") || "").replace(/[^0-9a-fA-F]/g, "");
-  if (acc.length === 6) document.documentElement.style.setProperty("--accent", "#" + acc);
-  const app = document.getElementById("app");
-  const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-  if (!nome || wa.length < 8) { app.innerHTML = '<p class="vuoto">Link di prenotazione non valido. Chiedi al locale il link corretto.</p>'; return; }
-  document.title = "Prenota da " + nome;
-  const pad = n => String(n).padStart(2, "0");
-  const iso = d => d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
-  const oggi = new Date(); oggi.setHours(12, 0, 0, 0);
-  const fine = new Date(oggi.getTime() + 60 * 864e5);
-  const orari = []; fasce.forEach(m => { let t = +m[1] * 60 + +m[2]; const f = +m[3] * 60 + +m[4]; while (t <= f) { orari.push(pad(Math.floor(t / 60) % 24) + ":" + pad(t % 60)); t += 15; } });
-  let persone = 2;
-  app.innerHTML = `<header><div class="logo">${esc(nome.replace(/^(trattoria|ristorante|bar|pizzeria|osteria|caffè|pub)\s+(da\s+|di\s+)?/i, "").trim()[0] || "T").toUpperCase()}</div><h1>Prenota da ${esc(nome)}</h1><div class="sub">Scegli quando venire: la richiesta arriva al locale su WhatsApp</div></header>
-  <form id="f" novalidate>
-    <div class="due"><label>Giorno<input type="date" id="g" min="${iso(oggi)}" max="${iso(fine)}" value="${iso(oggi)}" required></label>
-    <label>Ora<select id="o" required>${orari.map(o => `<option>${o}</option>`).join("")}</select></label></div>
-    <div class="chiuso" id="ch"></div>
-    <label>Persone<div class="pers"><button type="button" id="meno" aria-label="Meno persone">−</button><output id="np">2</output><button type="button" id="piu" aria-label="Più persone">+</button></div></label>
-    <label>Nome<input type="text" id="nm" autocomplete="name" maxlength="50" required placeholder="Nome e cognome"></label>
-    <label>Telefono<input type="tel" id="tel" autocomplete="tel" maxlength="20" placeholder="Per eventuali comunicazioni"></label>
-    <label class="spunta"><input type="checkbox" id="acc"> Serve un tavolo accessibile (sedia a rotelle)</label>
-    <label>Note<textarea id="nt" maxlength="160" placeholder="Allergie, seggiolone, un'occasione speciale…"></textarea></label>
-    <div class="err" id="err" role="alert"></div>
-    <button class="invia" type="submit">Invia la richiesta su WhatsApp</button>
-    <p class="nota">La prenotazione è confermata quando il locale ti risponde. Nessun dato viene salvato su questa pagina.</p>
-  </form>`;
-  const $ = id => document.getElementById(id);
-  const giorniNome = ["domenica", "lunedì", "martedì", "mercoledì", "giovedì", "venerdì", "sabato"];
-  const controlla = () => { const d = new Date($("g").value + "T12:00"); const c = !isNaN(d) && chiusi.includes(d.getDay()); $("ch").textContent = c ? `Il ${giorniNome[d.getDay()]} il locale è chiuso: scegli un altro giorno.` : ""; return !c; };
-  const aggiornaOrari = () => { const sel = $("o"), prima = sel.value, adesso = new Date(), oggiIso = iso(adesso), lim = pad(adesso.getHours() + (adesso.getMinutes() >= 30 ? 1 : 0)) + ":" + (adesso.getMinutes() >= 30 ? "00" : "30");
-    const lista = $("g").value === oggiIso ? orari.filter(o => o >= lim) : orari;
-    sel.innerHTML = lista.length ? lista.map(o => `<option${o === prima ? " selected" : ""}>${o}</option>`).join("") : '<option value="">Oggi non ci sono più orari</option>'; };
-  $("g").addEventListener("change", () => { controlla(); aggiornaOrari(); }); controlla(); aggiornaOrari();
-  const aggiorna = () => { $("np").textContent = persone; };
-  $("meno").onclick = () => { persone = Math.max(1, persone - 1); aggiorna(); };
-  $("piu").onclick = () => { persone = Math.min(max, persone + 1); aggiorna(); if (persone === max) $("err").textContent = `Per più di ${max} persone chiama il locale.`; };
-  $("f").addEventListener("submit", e => {
-    e.preventDefault(); $("err").textContent = "";
-    const g = $("g").value, o = $("o").value, n = $("nm").value.trim();
-    if (!g || g < iso(oggi) || g > iso(fine)) { $("err").textContent = "Scegli un giorno valido."; return; }
-    if (!controlla()) { $("err").textContent = "Quel giorno il locale è chiuso."; return; }
-    if (!o) { $("err").textContent = "Scegli un orario."; return; }
-    if (n.length < 2) { $("err").textContent = "Scrivi il tuo nome."; $("nm").focus(); return; }
-    const d = new Date(g + "T12:00"), bello = `${giorniNome[d.getDay()]} ${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()}`;
-    const righe = [`Ciao! Vorrei prenotare un tavolo da ${nome}.`, ``, `Nome: ${n}`, `Giorno: ${bello} (${g})`, `Ora: ${o}`, `Persone: ${persone}`];
-    if ($("tel").value.trim()) righe.push(`Telefono: ${$("tel").value.trim()}`);
-    if ($("acc").checked) righe.push(`Accessibilità: tavolo accessibile per sedia a rotelle`);
-    if ($("nt").value.trim()) righe.push(`Note: ${$("nt").value.trim().replace(/\s+/g, " ")}`);
-    righe.push(``, `(richiesta dalla pagina Prenota)`);
-    const testo = righe.join("\n");
-    location.href = "https://wa.me/" + wa + "?text=" + encodeURIComponent(testo);
-  });
-})();
+const L={
+ it:{sub:"Prenota un tavolo",giorno:"Giorno",ora:"Orario",pers:"Persone",pers1:"persona",persN:"persone",dati:"I tuoi dati",nome:"Nome e cognome",tel:"Telefono",telH:"Ti serve per il promemoria e per essere contattato dal locale",note:"Note (facoltativo)",noteP:"Allergie, seggiolone, un compleanno…",acc:"Serve un tavolo accessibile (sedia a rotelle)",priv:"Il locale usa nome e telefono solo per gestire questa prenotazione.",pranzo:"Pranzo",cena:"Cena",nessuno:"Nessun orario libero in questo giorno: scegline un altro.",scegli:"Scegli giorno e orario",prenota:"Prenota",invio:"Invio…",
+  ricevuta:"Prenotazione ricevuta",ricevutaP:"Il locale la vede già: non serve chiamare.",confermata:"Hai confermato",confermataP:"Ti aspettiamo. Se cambia qualcosa puoi ancora disdire.",disdetta:"Prenotazione disdetta",disdettaP:"Grazie per averlo detto: il tavolo è stato liberato.",annullata:"Il locale ha annullato la prenotazione",annullataP:"Per sapere perché, chiama il locale.",arrivato:"Buon appetito!",arrivatoP:"Sei già al tavolo.",inviata:"Prenotazione inviata",inviataP:"Il locale la sta registrando: tra meno di un minuto la vedi confermata qui.",rifiutata:"Il locale non ha potuto registrarla",rif_orario:"Quell'orario non è disponibile: prova con un altro.",rif_doppia:"Hai già una prenotazione per quel giorno.",rif_dati:"Controlla nome, telefono e persone e riprova.",rif_troppe:"In questo momento arrivano troppe prenotazioni: riprova tra poco o chiama il locale.",rif_chiuso:"Le prenotazioni online ora non sono attive. Chiama il locale.",rif_x:"Riprova o chiama il locale.",
+  quando:"Quando",chi:"A nome di",quanti:"Persone",tavAcc:"tavolo accessibile",
+  chiede:"È quasi ora: confermi che arrivi?",chiedeP:"Se non riesci, disdici: il tavolo va a qualcun altro.",si:"Sì, arrivo",no:"Non riesco, disdico",
+  dopo:"Un'ora prima ti chiediamo di confermare, dalle {h}.",avvisa:"Ricevi il promemoria",cal:"Aggiungi a Google Calendar",calF:"Aggiungi al calendario del telefono",notif:"Avvisami su questo telefono",notifOk:"Ti avvisiamo qui alle {h}, se la pagina resta aperta.",notifNo:"Il telefono non permette le notifiche da questa pagina: usa il calendario.",
+  disdici:"Disdici la prenotazione",disdiciQ:"Vuoi davvero disdire? Il tavolo verrà liberato.",disdiciSi:"Sì, disdico",annulla:"No, tienila",
+  salva:"Salva questa pagina: è il tuo link per confermare o disdire.",copia:"Copia il link",copiato:"Link copiato",nuova:"Fai un'altra prenotazione",mie:"Le tue prenotazioni",
+  presto:"Puoi confermare da un'ora prima.",chiusaE:"La prenotazione non è più modificabile.",rete:"Il locale non risponde. Riprova tra poco.",chiusoE:"Le prenotazioni online ora non sono attive. Chiama il locale.",codice:"Questo link non è valido.",
+  eNome:"Scrivi nome e cognome.",eTel:"Scrivi un numero di telefono valido.",ePers:"Per gruppi più grandi chiama il locale.",eOra:"Quell'orario non è più disponibile: scegline un altro.",ePriv:"Spunta la casella per continuare.",eDoppia:"Hai già una prenotazione per quel giorno.",
+  demoT:"Demo: per non aspettare l'ora vera, prova adesso la conferma.",demoB:"Simula: manca un'ora",oggi:"Oggi",domani:"Domani",alle:"alle",calTit:"Tavolo da {n}",calDesc:"Prenotazione per {p}. Confermala o disdicila qui: {u}",notTit:"Tra un'ora hai il tavolo da {n}",notBody:"Alle {o}, {p}. Tocca per confermare."},
+ en:{sub:"Book a table",giorno:"Day",ora:"Time",pers:"Guests",pers1:"guest",persN:"guests",dati:"Your details",nome:"Full name",tel:"Phone",telH:"Used for the reminder and so the restaurant can reach you",note:"Notes (optional)",noteP:"Allergies, high chair, a birthday…",acc:"I need an accessible table (wheelchair)",priv:"The restaurant uses your name and phone only to manage this booking.",pranzo:"Lunch",cena:"Dinner",nessuno:"No free times on this day: pick another one.",scegli:"Pick a day and time",prenota:"Book",invio:"Sending…",
+  ricevuta:"Booking received",ricevutaP:"The restaurant already sees it: no need to call.",confermata:"You confirmed",confermataP:"See you soon. If plans change you can still cancel.",disdetta:"Booking cancelled",disdettaP:"Thanks for letting us know: the table is free again.",annullata:"The restaurant cancelled this booking",annullataP:"Please call the restaurant to find out why.",arrivato:"Enjoy your meal!",arrivatoP:"You are already at the table.",inviata:"Booking sent",inviataP:"The restaurant is registering it: within a minute you will see it confirmed here.",rifiutata:"The restaurant could not register it",rif_orario:"That time is not available: try another one.",rif_doppia:"You already have a booking on that day.",rif_dati:"Check name, phone and guests and try again.",rif_troppe:"Too many bookings right now: try again shortly or call the restaurant.",rif_chiuso:"Online booking is not available right now. Please call the restaurant.",rif_x:"Try again or call the restaurant.",
+  quando:"When",chi:"Name",quanti:"Guests",tavAcc:"accessible table",
+  chiede:"Almost time: are you coming?",chiedeP:"If you can't make it, cancel so the table goes to someone else.",si:"Yes, I'm coming",no:"I can't, cancel",
+  dopo:"One hour before, we'll ask you to confirm, from {h}.",avvisa:"Get the reminder",cal:"Add to Google Calendar",calF:"Add to phone calendar",notif:"Remind me on this phone",notifOk:"We'll remind you here at {h} if this page stays open.",notifNo:"This phone does not allow notifications from this page: use the calendar.",
+  disdici:"Cancel booking",disdiciQ:"Cancel for sure? The table will be released.",disdiciSi:"Yes, cancel",annulla:"No, keep it",
+  salva:"Save this page: it's your link to confirm or cancel.",copia:"Copy link",copiato:"Link copied",nuova:"Make another booking",mie:"Your bookings",
+  presto:"You can confirm from one hour before.",chiusaE:"This booking can no longer be changed.",rete:"The restaurant is not responding. Try again shortly.",chiusoE:"Online booking is not available right now. Please call the restaurant.",codice:"This link is not valid.",
+  eNome:"Enter your full name.",eTel:"Enter a valid phone number.",ePers:"For larger groups please call the restaurant.",eOra:"That time is no longer available: pick another one.",ePriv:"Tick the box to continue.",eDoppia:"You already have a booking on that day.",
+  demoT:"Demo: try the confirmation now instead of waiting.",demoB:"Simulate: one hour to go",oggi:"Today",domani:"Tomorrow",alle:"at",calTit:"Table at {n}",calDesc:"Booking for {p}. Confirm or cancel here: {u}",notTit:"Your table at {n} is in one hour",notBody:"At {o}, {p}. Tap to confirm."}};
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+const dkey=d=>{d=new Date(d);return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
+const DEMO=!!(window.TavoloDemo||(()=>{try{return window.parent!==window&&window.parent.TavoloDemo}catch(e){return false}})());
+let lang=store.get("tavolo-prenota-lingua")||((navigator.language||"it").slice(0,2).toLowerCase()==="it"?"it":"en");if(!L[lang])lang="it";
+const t=(k,v)=>{let s=L[lang][k]||L.it[k];if(v)for(const x in v)s=s.split("{"+x+"}").join(v[x]);return s};
+let INFO=null,skew=0,sel={g:null,o:null,p:2},err="",inviando=false,P=null,chiediDisdici=false,simula=false,notifTimer=null,notificato=false;
+const qs=new URLSearchParams(location.search);let PID=qs.get("p"),PK=qs.get("k");
+/* Due modi: sul computer del locale la pagina parla con Tavolo (/api/prenota);
+   su internet (GitHub Pages, ?l=codice del locale) parla con il database Firebase, che Tavolo controlla ogni 30 secondi. */
+const TAVOLO_FB=/*FIREBASE*/{apiKey:"AIzaSyA4IA5uqQVgj_0_IUaT8Y8tgscsarsJJ60",progetto:"tavolo-prenota"}/*FINE*/;
+const LID=(qs.get("l")||"").replace(/[^\w-]/g,"");
+const MODO=LID&&TAVOLO_FB?"fb":"api";
+const FSB=TAVOLO_FB?`https://firestore.googleapis.com/v1/projects/${TAVOLO_FB.progetto}/databases/(default)/documents`:"";
+const fbEnc=v=>typeof v==="boolean"?{booleanValue:v}:Number.isInteger(v)?{integerValue:String(v)}:{stringValue:String(v??"")};
+const fbDec=f=>{const o={};for(const[k,v]of Object.entries(f||{}))o[k]="integerValue"in v?+v.integerValue:"booleanValue"in v?v.booleanValue:"timestampValue"in v?v.timestampValue:"arrayValue"in v?(v.arrayValue.values||[]).map(x=>fbDec({x}).x):v.stringValue??null;return o};
+async function fbChiedi(url,body){const r=await fetch(url+(url.includes("?")?"&":"?")+"key="+TAVOLO_FB.apiKey,body?{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)}:{cache:"no-store"});
+  let j={};try{j=await r.json()}catch(e){}if(!r.ok){const e=new Error("rete");e.codice=r.status===404?"codice":r.status===403?"negato":"rete";throw e}return j}
+const vistaFb=(id,d)=>{const t0=new Date(d.data+"T"+d.ora).getTime();return{id,nome:d.nome,data:d.data,ora:d.ora,persone:d.persone,note:d.note||"",acc:!!d.acc,stato:d.stato,motivo:d.motivo||"",conf:d.conf||"attesa",inizio:t0,finestra:d.finestra?Date.parse(d.finestra):t0-3600e3}};
+const fbNome=id=>`projects/${TAVOLO_FB.progetto}/databases/(default)/documents/locali/${LID}/prenotazioni/${id}`;
+const BE={
+  async info(){if(MODO==="api")return chiedi("/api/prenota/info");const j=await fbChiedi(`${FSB}/locali/${LID}`);const l=fbDec(j.fields);if(l.aperto===false){const e=new Error("chiuso");e.codice="chiuso";throw e}return{locale:Object.assign(l,{ora:Date.now()})}},
+  async stato(){if(MODO==="api")return chiedi(`/api/prenota/stato?id=${encodeURIComponent(PID)}&k=${encodeURIComponent(PK||"")}`);
+    const[a,b]=await Promise.all([BE.info(),fbChiedi(`${FSB}/locali/${LID}/prenotazioni/${encodeURIComponent(PID)}`)]);return{locale:a.locale,pren:vistaFb(PID,fbDec(b.fields))}},
+  async nuova(x){if(MODO==="api")return chiedi("/api/prenota/nuova",x);
+    const a=new Uint8Array(18);crypto.getRandomValues(a);const id=btoa(String.fromCharCode(...a)).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+    const campi={nome:x.nome.slice(0,50),tel:x.tel.slice(0,20),data:x.data,ora:x.ora,persone:x.persone,note:String(x.note||"").slice(0,160),acc:!!x.acc,stato:"nuova",conf:"attesa"};
+    try{await fbChiedi(`${FSB}:commit`,{writes:[{update:{name:fbNome(id),fields:Object.fromEntries(Object.entries(campi).map(([k,v])=>[k,fbEnc(v)]))},updateTransforms:[{fieldPath:"agg",setToServerValue:"REQUEST_TIME"},{fieldPath:"creata",setToServerValue:"REQUEST_TIME"}],currentDocument:{exists:false}}]})}
+    catch(e){if(e.codice==="negato")e.codice="orario";throw e}
+    return{id,k:"",pren:vistaFb(id,campi)}},
+  async risposta(r){if(MODO==="api")return chiedi("/api/prenota/risposta",{id:PID,k:PK,r,demo:simula||undefined});
+    if(r==="conferma"&&(P.stato!=="attesa"||adesso()<P.finestra)){const e=new Error("presto");e.codice="presto";throw e}
+    try{await fbChiedi(`${FSB}:commit`,{writes:[{update:{name:fbNome(PID),fields:{conf:fbEnc(r==="conferma"?"confermata":"disdetta")}},updateMask:{fieldPaths:["conf"]},updateTransforms:[{fieldPath:"agg",setToServerValue:"REQUEST_TIME"}]}]})}
+    catch(e){if(e.codice==="negato")e.codice="chiusa";throw e}
+    return BE.stato()}
+};
+const adesso=()=>Date.now()+skew;
+function toast(m){const e=$("toast");e.textContent=m;e.hidden=false;clearTimeout(toast.h);toast.h=setTimeout(()=>e.hidden=true,3200)}
+async function chiedi(url,body){
+  const r=await fetch(url,body?{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)}:{cache:"no-store"});
+  let j={};try{j=await r.json()}catch(e){}if(!r.ok){const e=new Error(j.errore||"rete");e.codice=j.errore;e.dati=j;throw e}return j}
+const persTxt=n=>n+" "+(+n===1?t("pers1"):t("persN"));
+const giornoLungo=d=>{const o=dkey(adesso()),dm=dkey(adesso()+864e5);const g=new Date(d+"T12:00").toLocaleDateString(lang==="en"?"en-GB":"it-IT",{weekday:"long",day:"numeric",month:"long"});return d===o?t("oggi")+", "+g:d===dm?t("domani")+", "+g:g.charAt(0).toUpperCase()+g.slice(1)};
+const hh=ms=>new Date(ms).toLocaleTimeString(lang==="en"?"en-GB":"it-IT",{hour:"2-digit",minute:"2-digit"});
+function linkMio(){const u=new URL(location.href);u.search="";u.hash="";if(LID)u.searchParams.set("l",LID);u.searchParams.set("p",PID);if(PK)u.searchParams.set("k",PK);return u.href}
+function mie(){try{return JSON.parse(store.get("tavolo-prenota-mie")||"[]")}catch(e){return[]}}
+function salvaMia(x){const a=mie().filter(y=>y.id!==x.id);a.unshift(x);store.set("tavolo-prenota-mie",JSON.stringify(a.slice(0,8)))}
+
+/* ---------- orari ---------- */
+function slotsDi(d){const out=[];(INFO.orari||[]).forEach((f,i)=>{const[a,b]=f.split("-");let[h,m]=a.split(":").map(Number);const fine=b;const list=[];
+  while(true){const s=String(h).padStart(2,"0")+":"+String(m).padStart(2,"0");if(s>=fine)break;const t0=new Date(d+"T"+s).getTime();if(t0>adesso()+30*60e3)list.push(s);m+=30;if(m>=60){m-=60;h++}if(h>23)break}
+  if(list.length)out.push({nome:a<"17:00"?t("pranzo"):t("cena"),list})});return out}
+function giorni(){const g=[];for(let i=0;i<30;i++){const d=dkey(adesso()+i*864e5);if((INFO.chiuso||[]).includes(new Date(d+"T12:00").getDay()))continue;if(!slotsDi(d).length)continue;g.push(d)}return g}
+
+/* ---------- avvio ---------- */
+async function avvio(){
+  if(!LID&&/github\.io$/i.test(location.hostname)){if(qs.has("w")){location.replace("prenota-wa.html"+location.search);return}chiuso(t("codice"));return}
+  try{const j=PID?await BE.stato():await BE.info();INFO=j.locale;P=j.pren||null;skew=INFO.ora-Date.now()}
+  catch(e){chiuso(e.codice==="chiuso"?t("chiusoE"):e.codice==="codice"?t("codice"):t("rete"));return}
+  document.documentElement.style.setProperty("--accent",INFO.accent||"#2F6B4F");
+  disegna();
+}
+function chiuso(msg){$("bar").hidden=true;$("m").innerHTML=`<p class="chiuso">${esc(msg)}</p>`}
+function testata(){document.documentElement.lang=lang;$("nome").textContent=INFO?INFO.nome:"Prenota";$("sub").textContent=t("sub")+(INFO&&INFO.citta?" · "+INFO.citta:"");document.title=(INFO?INFO.nome+" · ":"")+t("sub");
+  document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.l===lang))}
+function disegna(){testata();if(!INFO)return;if(P)vistaStato();else vistaForm()}
+
+/* ---------- modulo ---------- */
+function vistaForm(){
+  const gg=giorni();if(!sel.g||!gg.includes(sel.g)){sel.g=gg[0]||null;sel.o=null}
+  const fasce=sel.g?slotsDi(sel.g):[];if(sel.o&&!fasce.some(f=>f.list.includes(sel.o)))sel.o=null;
+  const loc=lang==="en"?"en-GB":"it-IT",m=mie().filter(x=>x.data>=dkey(adesso()));
+  const v=id=>$(id)?$(id).value:"";const bozza={n:v("fNome"),t:v("fTel"),no:v("fNote"),a:$("fAcc")?$("fAcc").checked:false,pv:$("fPriv")?$("fPriv").checked:false};
+  $("m").innerHTML=`${m.length?`<h2>${esc(t("mie"))}</h2><div class="mie">${m.map(x=>`<a href="?${LID?"l="+encodeURIComponent(LID)+"&":""}p=${encodeURIComponent(x.id)}${x.k?"&k="+encodeURIComponent(x.k):""}"><span>${esc(giornoLungo(x.data))}</span><b>${esc(x.ora)}</b></a>`).join("")}</div>`:""}
+  <h2>${esc(t("giorno"))}</h2><div class="pills" role="group" aria-label="${esc(t("giorno"))}">${gg.map(d=>{const x=new Date(d+"T12:00");return`<button class="day" data-g="${d}" aria-pressed="${d===sel.g}"><small>${esc(x.toLocaleDateString(loc,{weekday:"short"}).replace(".",""))}</small><b>${x.getDate()}</b><small>${esc(x.toLocaleDateString(loc,{month:"short"}).replace(".",""))}</small></button>`}).join("")}</div>
+  <h2>${esc(t("pers"))}</h2><div class="stepper"><button data-p="-1" aria-label="−" ${sel.p<=1?"disabled":""}>−</button><b>${sel.p}</b><button data-p="1" aria-label="+" ${sel.p>=INFO.max?"disabled":""}>+</button><span>${esc(+sel.p===1?t("pers1"):t("persN"))}</span></div>
+  ${sel.p>=INFO.max?`<div class="note" style="margin-top:6px">${esc(t("ePers"))}${INFO.tel?" · "+esc(INFO.tel):""}</div>`:""}
+  <h2>${esc(t("ora"))}</h2>${fasce.length?fasce.map(f=>`${fasce.length>1?`<div class="fascia">${esc(f.nome)}</div>`:""}<div class="slots">${f.list.map(o=>`<button class="slot" data-o="${o}" aria-pressed="${o===sel.o}">${o}</button>`).join("")}</div>`).join(""):`<p class="note">${esc(t("nessuno"))}</p>`}
+  <h2>${esc(t("dati"))}</h2><div class="fields">
+   <label for="fNome">${esc(t("nome"))}<input type="text" id="fNome" autocomplete="name" maxlength="50" value="${esc(bozza.n||store.get("tavolo-prenota-nome")||"")}"></label>
+   <label for="fTel">${esc(t("tel"))}<input type="tel" id="fTel" autocomplete="tel" inputmode="tel" maxlength="20" placeholder="333 123 4567" value="${esc(bozza.t||store.get("tavolo-prenota-tel")||"")}"><span class="note" style="font-weight:400">${esc(t("telH"))}</span></label>
+   <label for="fNote">${esc(t("note"))}<textarea id="fNote" maxlength="160" placeholder="${esc(t("noteP"))}">${esc(bozza.no)}</textarea></label>
+   <label class="check"><input type="checkbox" id="fAcc" ${bozza.a?"checked":""}> ♿ ${esc(t("acc"))}</label>
+   <label class="check"><input type="checkbox" id="fPriv" ${bozza.pv?"checked":""}> ${esc(t("priv"))}</label>
+   ${err?`<div class="err" role="alert">${esc(err)}</div>`:""}</div>`;
+  $("bar").hidden=false;$("riass").textContent=sel.g&&sel.o?`${giornoLungo(sel.g)} ${t("alle")} ${sel.o} · ${persTxt(sel.p)}`:t("scegli");
+  const b=$("vai");b.className="big";b.textContent=inviando?t("invio"):t("prenota");b.disabled=!(sel.g&&sel.o)||inviando;
+}
+async function invia(){
+  if(inviando)return;err="";const nome=$("fNome").value.trim(),tel=$("fTel").value.trim();
+  if(nome.length<2)err=t("eNome");else if(tel.replace(/\D/g,"").length<8)err=t("eTel");else if(!$("fPriv").checked)err=t("ePriv");
+  if(err){vistaForm();return}
+  inviando=true;vistaForm();
+  try{const j=await BE.nuova({nome,tel,data:sel.g,ora:sel.o,persone:sel.p,note:$("fNote").value,acc:$("fAcc").checked,privacy:true});
+    store.set("tavolo-prenota-nome",nome);store.set("tavolo-prenota-tel",tel);
+    PID=j.id;PK=j.k;P=j.pren;salvaMia({id:j.id,k:j.k,data:sel.g,ora:sel.o});
+    try{history.replaceState(null,"",linkMio())}catch(e){}
+    inviando=false;window.scrollTo(0,0);disegna();
+  }catch(e){inviando=false;err={nome:t("eNome"),tel:t("eTel"),persone:t("ePers"),orario:t("eOra"),privacy:t("ePriv"),doppia:t("eDoppia"),chiuso:t("chiusoE")}[e.codice]||t("rete");if(e.codice==="orario")sel.o=null;vistaForm()}
+}
+
+/* ---------- la tua prenotazione ---------- */
+function calGoogle(){const d=P.data.replace(/-/g,""),o=P.ora.replace(":",""),f=new Date(P.inizio+2*3600e3),fine=dkey(f).replace(/-/g,"")+"T"+String(f.getHours()).padStart(2,"0")+String(f.getMinutes()).padStart(2,"0")+"00";
+  const q=new URLSearchParams({action:"TEMPLATE",text:t("calTit",{n:INFO.nome}),dates:`${d}T${o}00/${fine}`,details:t("calDesc",{p:persTxt(P.persone),u:linkMio()}),location:INFO.nome+(INFO.citta?", "+INFO.citta:"")});
+  return"https://calendar.google.com/calendar/render?"+q.toString()}
+function ics(){const p2=n=>String(n).padStart(2,"0"),loc=d=>d.getFullYear()+p2(d.getMonth()+1)+p2(d.getDate())+"T"+p2(d.getHours())+p2(d.getMinutes())+"00",u=linkMio();
+  const e=s=>String(s).replace(/[\\;,]/g,m=>"\\"+m).replace(/\n/g,"\\n");
+  return["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Tavolo//Prenota//IT","BEGIN:VEVENT","UID:"+P.id+"@tavolo","DTSTAMP:"+new Date().toISOString().replace(/[-:]/g,"").slice(0,15)+"Z","DTSTART:"+loc(new Date(P.inizio)),"DURATION:PT2H",
+   "SUMMARY:"+e(t("calTit",{n:INFO.nome})),"DESCRIPTION:"+e(t("calDesc",{p:persTxt(P.persone),u})),"URL:"+u,"BEGIN:VALARM","TRIGGER:-PT1H","ACTION:DISPLAY","DESCRIPTION:"+e(t("notTit",{n:INFO.nome})),"END:VALARM","END:VEVENT","END:VCALENDAR"].join("\r\n")}
+function vistaStato(){
+  $("bar").hidden=true;const inF=(adesso()>=P.finestra||simula)&&P.stato!=="nuova",att=(P.stato==="attesa"||P.stato==="nuova")&&P.conf!=="disdetta";
+  let ic="✓",cls="",tit=t("ricevuta"),sot=t("ricevutaP");
+  if(P.stato==="rifiutata"){ic="!";cls="no";tit=t("rifiutata");sot=t("rif_"+(P.motivo||"x"))+(INFO.tel?" "+INFO.tel:"")}
+  else if(P.conf==="disdetta"){ic="✕";cls="no";tit=t("disdetta");sot=t("disdettaP")}
+  else if(P.stato==="nuova"){ic="…";cls="warn";tit=t("inviata");sot=t("inviataP")}
+  else if(P.stato==="annullata"&&P.conf==="disdetta"){ic="✕";cls="no";tit=t("disdetta");sot=t("disdettaP")}
+  else if(P.stato==="annullata"){ic="!";cls="no";tit=t("annullata");sot=t("annullataP")+(INFO.tel?" "+INFO.tel:"")}
+  else if(P.stato==="arrivato"||P.stato==="chiusa"){tit=t("arrivato");sot=t("arrivatoP")}
+  else if(P.conf==="confermata"){tit=t("confermata");sot=t("confermataP")}
+  else if(inF&&INFO.promemoria){ic="?";cls="warn";tit=t("chiede");sot=t("chiedeP")}
+  const chiede=att&&P.conf!=="confermata"&&inF&&INFO.promemoria;
+  const nAp="Notification" in window;let nPerm="default";try{nPerm=nAp?Notification.permission:"denied"}catch(e){}
+  $("m").innerHTML=`<div class="card">
+   <div class="stato"><div class="ico ${cls}" aria-hidden="true">${ic}</div><div><h3>${esc(tit)}</h3><p>${esc(sot)}</p></div></div>
+   <div><div class="quando">${esc(P.ora)}</div><div style="font-weight:600">${esc(giornoLungo(P.data))}</div></div>
+   <dl class="det"><dt>${esc(t("chi"))}</dt><dd>${esc(P.nome)}</dd><dt>${esc(t("quanti"))}</dt><dd>${esc(persTxt(P.persone))}${P.acc?" · ♿ "+esc(t("tavAcc")):""}</dd>${P.note?`<dt>${esc(t("note").replace(/ \(.*\)/,""))}</dt><dd style="font-weight:400">${esc(P.note)}</dd>`:""}</dl>
+   ${chiede?`<div class="ask"><div class="row2"><button class="big" id="si">${esc(t("si"))}</button><button class="big no" id="nodis">${esc(t("no"))}</button></div></div>`:""}
+   ${att&&P.conf!=="confermata"&&!inF&&INFO.promemoria?`<div class="conf"><b style="font-size:15px">${esc(t("avvisa"))}</b><span class="note">${esc(t("dopo",{h:hh(P.finestra)}))}</span>
+     <a class="ghost" href="${esc(calGoogle())}" target="_blank" rel="noopener">📅 ${esc(t("cal"))}</a>
+     ${DEMO?"":`<button class="ghost" id="ics">📲 ${esc(t("calF"))}</button>`}
+     ${nAp&&nPerm!=="denied"?`<button class="ghost" id="notif">🔔 ${esc(t("notif"))}</button>`:""}
+     <span class="note" id="notifTxt">${nPerm==="granted"?esc(t("notifOk",{h:hh(P.finestra)})):""}</span></div>`:""}
+   ${att?(chiediDisdici?`<div class="ask" style="background:var(--crit-soft)"><b style="color:var(--crit)">${esc(t("disdiciQ"))}</b><div class="row2"><button class="big no" id="disSi">${esc(t("disdiciSi"))}</button><button class="ghost" id="disNo">${esc(t("annulla"))}</button></div></div>`:chiede?"":`<button class="lnk" id="dis">${esc(t("disdici"))}</button>`):""}
+  </div>
+  ${att?`<p class="note" style="margin-top:14px">${esc(t("salva"))}</p><button class="ghost" id="copia">${esc(t("copia"))}</button>`:""}
+  ${DEMO&&att&&P.conf!=="confermata"&&!inF&&INFO.promemoria?`<div class="demo" style="margin-top:14px">${esc(t("demoT"))}<br><button class="ghost" id="sim">${esc(t("demoB"))}</button></div>`:""}
+  <button class="lnk" id="nuova" style="margin-top:12px">${esc(t("nuova"))}</button>`;
+  programma();
+}
+function programma(){clearTimeout(notifTimer);if(!P||P.stato!=="attesa"||P.conf==="confermata")return;const d=P.finestra-adesso();
+  if(d<=0){avvisaOra();return}if(d<2147e6)notifTimer=setTimeout(()=>{disegna();avvisaOra()},d+500)}
+function avvisaOra(){if(notificato||!INFO.promemoria||!P||P.stato!=="attesa"||P.conf==="confermata")return;notificato=true;
+  try{navigator.vibrate&&navigator.vibrate([200,100,200])}catch(e){}
+  try{if("Notification" in window&&Notification.permission==="granted"){const n=new Notification(t("notTit",{n:INFO.nome}),{body:t("notBody",{o:P.ora,p:persTxt(P.persone)}),tag:"tavolo-"+P.id});n.onclick=()=>{window.focus();n.close()}}}catch(e){}}
+async function rispondi(r){try{const j=await BE.risposta(r);P=j.pren;chiediDisdici=false;disegna()}
+  catch(e){if(e.dati&&e.dati.pren)P=e.dati.pren;toast(e.codice==="presto"?t("presto"):e.codice==="chiusa"?t("chiusaE"):t("rete"));chiediDisdici=false;disegna()}}
+async function aggiorna(){if(!PID||document.hidden||chiediDisdici)return;try{const j=await BE.stato();const prima=JSON.stringify(P);P=j.pren;skew=j.locale.ora-Date.now();if(JSON.stringify(P)!==prima)disegna()}catch(e){}}
+
+/* ---------- eventi ---------- */
+document.addEventListener("click",async e=>{
+  const b=e.target.closest("button,[data-g],[data-o],[data-p]");if(!b)return;
+  if(b.dataset.l){lang=b.dataset.l;store.set("tavolo-prenota-lingua",lang);disegna();return}
+  if(b.dataset.g){sel.g=b.dataset.g;sel.o=null;err="";vistaForm();return}
+  if(b.dataset.o){sel.o=b.dataset.o;err="";vistaForm();return}
+  if(b.dataset.p){sel.p=Math.max(1,Math.min(INFO.max,sel.p+ +b.dataset.p));vistaForm();return}
+  switch(b.id){
+    case"vai":invia();break;
+    case"si":rispondi("conferma");break;
+    case"nodis":case"disSi":rispondi("disdici");break;
+    case"dis":chiediDisdici=true;disegna();break;
+    case"disNo":chiediDisdici=false;disegna();break;
+    case"sim":simula=true;disegna();avvisaOra();break;
+    case"copia":{const u=linkMio();try{await navigator.clipboard.writeText(u);toast(t("copiato"))}catch(_){toast(u)}break}
+    case"nuova":PID=PK=null;P=null;simula=false;notificato=false;try{history.replaceState(null,"",location.pathname+(LID?"?l="+encodeURIComponent(LID):""))}catch(_){}await avvio();window.scrollTo(0,0);break;
+    case"ics":{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([ics()],{type:"text/calendar"}));a.download="prenotazione.ics";document.body.appendChild(a);a.click();a.remove();break}
+    case"notif":{let st="denied";try{st=await Notification.requestPermission()}catch(_){}
+      const el=$("notifTxt");if(el)el.textContent=st==="granted"?t("notifOk",{h:hh(P.finestra)}):t("notifNo");if(st!=="granted"){b.hidden=true}programma();break}
+  }
+});
+avvio();setInterval(aggiorna,15000);
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)aggiorna()});
 </script>
 </body>
 </html>

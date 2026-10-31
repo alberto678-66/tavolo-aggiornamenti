@@ -3,8 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<link rel="icon" href="/icona.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="/icona-180.png">
+<link rel="icon" href="icona.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icona-180.png">
+<link rel="manifest" href="prenota.webmanifest">
+<meta name="theme-color" content="#2F6B4F">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Prenota">
 <title>Prenota un tavolo</title>
 <style>
 /* Layout: una colonna da telefono, come la pagina "ordina" del cliente; scelte a pillole, barra fissa in basso col pulsante principale. */
@@ -95,7 +100,7 @@ const L={
   ricevuta:"Prenotazione ricevuta",ricevutaP:"Il locale la vede già: non serve chiamare.",confermata:"Hai confermato",confermataP:"Ti aspettiamo. Se cambia qualcosa puoi ancora disdire.",disdetta:"Prenotazione disdetta",disdettaP:"Grazie per averlo detto: il tavolo è stato liberato.",annullata:"Il locale ha annullato la prenotazione",annullataP:"Per sapere perché, chiama il locale.",arrivato:"Buon appetito!",arrivatoP:"Sei già al tavolo.",inviata:"Prenotazione inviata",inviataP:"Il locale la sta registrando: tra meno di un minuto la vedi confermata qui.",rifiutata:"Il locale non ha potuto registrarla",rif_orario:"Quell'orario non è disponibile: prova con un altro.",rif_doppia:"Hai già una prenotazione per quel giorno.",rif_dati:"Controlla nome, telefono e persone e riprova.",rif_troppe:"In questo momento arrivano troppe prenotazioni: riprova tra poco o chiama il locale.",rif_chiuso:"Le prenotazioni online ora non sono attive. Chiama il locale.",rif_x:"Riprova o chiama il locale.",
   quando:"Quando",chi:"A nome di",quanti:"Persone",tavAcc:"tavolo accessibile",
   chiede:"È quasi ora: confermi che arrivi?",chiedeP:"Se non riesci, disdici: il tavolo va a qualcun altro.",si:"Sì, arrivo",no:"Non riesco, disdico",
-  dopo:"Un'ora prima ti chiediamo di confermare, dalle {h}.",avvisa:"Ricevi il promemoria",cal:"Aggiungi a Google Calendar",calF:"Aggiungi al calendario del telefono",notif:"Avvisami su questo telefono",notifOk:"Ti avvisiamo qui alle {h}, se la pagina resta aperta.",notifNo:"Il telefono non permette le notifiche da questa pagina: usa il calendario.",
+  dopo:"Un'ora prima ti chiediamo di confermare, dalle {h}.",avvisa:"Ricevi il promemoria",cal:"Aggiungi a Google Calendar",calF:"Aggiungi al calendario del telefono",notif:"Avvisami su questo telefono",push:"Avvisami un'ora prima",pushOk:"Promemoria attivo: alle {h} ti arriva una notifica, anche con l'app chiusa.",pushNo:"Le notifiche sono bloccate: attivale nelle impostazioni del telefono, oppure usa il calendario.",iosApp:"Su iPhone il promemoria arriva solo dall'app: tocca Condividi, poi «Aggiungi alla schermata Home», e apri Prenota da lì.",installa:"Installa l'app",installaP:"Così ritrovi le tue prenotazioni e ricevi il promemoria.",notifOk:"Ti avvisiamo qui alle {h}, se la pagina resta aperta.",notifNo:"Il telefono non permette le notifiche da questa pagina: usa il calendario.",
   disdici:"Disdici la prenotazione",disdiciQ:"Vuoi davvero disdire? Il tavolo verrà liberato.",disdiciSi:"Sì, disdico",annulla:"No, tienila",
   salva:"Salva questa pagina: è il tuo link per confermare o disdire.",copia:"Copia il link",copiato:"Link copiato",nuova:"Fai un'altra prenotazione",mie:"Le tue prenotazioni",
   presto:"Puoi confermare da un'ora prima.",chiusaE:"La prenotazione non è più modificabile.",rete:"Il locale non risponde. Riprova tra poco.",chiusoE:"Le prenotazioni online ora non sono attive. Chiama il locale.",codice:"Questo link non è valido.",
@@ -105,7 +110,7 @@ const L={
   ricevuta:"Booking received",ricevutaP:"The restaurant already sees it: no need to call.",confermata:"You confirmed",confermataP:"See you soon. If plans change you can still cancel.",disdetta:"Booking cancelled",disdettaP:"Thanks for letting us know: the table is free again.",annullata:"The restaurant cancelled this booking",annullataP:"Please call the restaurant to find out why.",arrivato:"Enjoy your meal!",arrivatoP:"You are already at the table.",inviata:"Booking sent",inviataP:"The restaurant is registering it: within a minute you will see it confirmed here.",rifiutata:"The restaurant could not register it",rif_orario:"That time is not available: try another one.",rif_doppia:"You already have a booking on that day.",rif_dati:"Check name, phone and guests and try again.",rif_troppe:"Too many bookings right now: try again shortly or call the restaurant.",rif_chiuso:"Online booking is not available right now. Please call the restaurant.",rif_x:"Try again or call the restaurant.",
   quando:"When",chi:"Name",quanti:"Guests",tavAcc:"accessible table",
   chiede:"Almost time: are you coming?",chiedeP:"If you can't make it, cancel so the table goes to someone else.",si:"Yes, I'm coming",no:"I can't, cancel",
-  dopo:"One hour before, we'll ask you to confirm, from {h}.",avvisa:"Get the reminder",cal:"Add to Google Calendar",calF:"Add to phone calendar",notif:"Remind me on this phone",notifOk:"We'll remind you here at {h} if this page stays open.",notifNo:"This phone does not allow notifications from this page: use the calendar.",
+  dopo:"One hour before, we'll ask you to confirm, from {h}.",avvisa:"Get the reminder",cal:"Add to Google Calendar",calF:"Add to phone calendar",notif:"Remind me on this phone",push:"Remind me one hour before",pushOk:"Reminder on: at {h} you'll get a notification, even with the app closed.",pushNo:"Notifications are blocked: turn them on in your phone settings, or use the calendar.",iosApp:"On iPhone the reminder only works from the app: tap Share, then “Add to Home Screen”, and open Prenota from there.",installa:"Install the app",installaP:"Keep your bookings at hand and get the reminder.",notifOk:"We'll remind you here at {h} if this page stays open.",notifNo:"This phone does not allow notifications from this page: use the calendar.",
   disdici:"Cancel booking",disdiciQ:"Cancel for sure? The table will be released.",disdiciSi:"Yes, cancel",annulla:"No, keep it",
   salva:"Save this page: it's your link to confirm or cancel.",copia:"Copy link",copiato:"Link copied",nuova:"Make another booking",mie:"Your bookings",
   presto:"You can confirm from one hour before.",chiusaE:"This booking can no longer be changed.",rete:"The restaurant is not responding. Try again shortly.",chiusoE:"Online booking is not available right now. Please call the restaurant.",codice:"This link is not valid.",
@@ -123,7 +128,13 @@ const qs=new URLSearchParams(location.search);let PID=qs.get("p"),PK=qs.get("k")
 /* Due modi: sul computer del locale la pagina parla con Tavolo (/api/prenota);
    su internet (GitHub Pages, ?l=codice del locale) parla con il database Firebase, che Tavolo controlla ogni 30 secondi. */
 const TAVOLO_FB=/*FIREBASE*/{apiKey:"AIzaSyA4IA5uqQVgj_0_IUaT8Y8tgscsarsJJ60",progetto:"tavolo-prenota"}/*FINE*/;
-const LID=(qs.get("l")||"").replace(/[^\w-]/g,"");
+const LID=(qs.get("l")||(TAVOLO_FB&&/github\.io$/i.test(location.hostname)?(()=>{try{return localStorage.getItem("tavolo-prenota-l")||""}catch(e){return""}})():"")).replace(/[^\w-]/g,"");
+try{if(LID&&TAVOLO_FB)localStorage.setItem("tavolo-prenota-l",LID)}catch(e){}
+const IOS=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+const APP=matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
+const PUSH_OK=()=>MODO==="fb"&&INFO&&INFO.vapid&&"serviceWorker"in navigator&&"PushManager"in window&&"Notification"in window;
+let installa=null;addEventListener("beforeinstallprompt",e=>{e.preventDefault();installa=e;if(INFO)disegna()});
+if("serviceWorker"in navigator&&TAVOLO_FB&&location.protocol==="https:")navigator.serviceWorker.register("prenota-sw.js").catch(()=>{});
 const MODO=LID&&TAVOLO_FB?"fb":"api";
 const FSB=TAVOLO_FB?`https://firestore.googleapis.com/v1/projects/${TAVOLO_FB.progetto}/databases/(default)/documents`:"";
 const fbEnc=v=>typeof v==="boolean"?{booleanValue:v}:Number.isInteger(v)?{integerValue:String(v)}:{stringValue:String(v??"")};
@@ -142,6 +153,7 @@ const BE={
     try{await fbChiedi(`${FSB}:commit`,{writes:[{update:{name:fbNome(id),fields:Object.fromEntries(Object.entries(campi).map(([k,v])=>[k,fbEnc(v)]))},updateTransforms:[{fieldPath:"agg",setToServerValue:"REQUEST_TIME"},{fieldPath:"creata",setToServerValue:"REQUEST_TIME"}],currentDocument:{exists:false}}]})}
     catch(e){if(e.codice==="negato")e.codice="orario";throw e}
     return{id,k:"",pren:vistaFb(id,campi)}},
+  async push(sub){await fbChiedi(`${FSB}:commit`,{writes:[{update:{name:fbNome(PID),fields:{push:fbEnc(JSON.stringify(sub))}},updateMask:{fieldPaths:["push"]},updateTransforms:[{fieldPath:"agg",setToServerValue:"REQUEST_TIME"}]}]})},
   async risposta(r){if(MODO==="api")return chiedi("/api/prenota/risposta",{id:PID,k:PK,r,demo:simula||undefined});
     if(r==="conferma"&&(P.stato!=="attesa"||adesso()<P.finestra)){const e=new Error("presto");e.codice="presto";throw e}
     try{await fbChiedi(`${FSB}:commit`,{writes:[{update:{name:fbNome(PID),fields:{conf:fbEnc(r==="conferma"?"confermata":"disdetta")}},updateMask:{fieldPaths:["conf"]},updateTransforms:[{fieldPath:"agg",setToServerValue:"REQUEST_TIME"}]}]})}
@@ -242,8 +254,11 @@ function vistaStato(){
    ${att&&P.conf!=="confermata"&&!inF&&INFO.promemoria?`<div class="conf"><b style="font-size:15px">${esc(t("avvisa"))}</b><span class="note">${esc(t("dopo",{h:hh(P.finestra)}))}</span>
      <a class="ghost" href="${esc(calGoogle())}" target="_blank" rel="noopener">📅 ${esc(t("cal"))}</a>
      ${DEMO?"":`<button class="ghost" id="ics">📲 ${esc(t("calF"))}</button>`}
-     ${nAp&&nPerm!=="denied"?`<button class="ghost" id="notif">🔔 ${esc(t("notif"))}</button>`:""}
-     <span class="note" id="notifTxt">${nPerm==="granted"?esc(t("notifOk",{h:hh(P.finestra)})):""}</span></div>`:""}
+     ${PUSH_OK()&&(!IOS||APP)?(pushAttivo()?`<span class="note" style="color:var(--ok);font-weight:600">🔔 ${esc(t("pushOk",{h:hh(P.finestra)}))}</span>`:nPerm==="denied"?`<span class="note">${esc(t("pushNo"))}</span>`:`<button class="big" id="pushOn">🔔 ${esc(t("push"))}</button>`)
+       :IOS&&!APP&&MODO==="fb"?`<span class="note">📲 ${esc(t("iosApp"))}</span>`
+       :nAp&&nPerm!=="denied"?`<button class="ghost" id="notif">🔔 ${esc(t("notif"))}</button>`:""}
+     <span class="note" id="notifTxt">${!PUSH_OK()&&nPerm==="granted"?esc(t("notifOk",{h:hh(P.finestra)})):""}</span></div>`:""}
+   ${installa&&!APP?`<button class="ghost" id="inst">📲 ${esc(t("installa"))} · <span style="font-weight:400">${esc(t("installaP"))}</span></button>`:""}
    ${att?(chiediDisdici?`<div class="ask" style="background:var(--crit-soft)"><b style="color:var(--crit)">${esc(t("disdiciQ"))}</b><div class="row2"><button class="big no" id="disSi">${esc(t("disdiciSi"))}</button><button class="ghost" id="disNo">${esc(t("annulla"))}</button></div></div>`:chiede?"":`<button class="lnk" id="dis">${esc(t("disdici"))}</button>`):""}
   </div>
   ${att?`<p class="note" style="margin-top:14px">${esc(t("salva"))}</p><button class="ghost" id="copia">${esc(t("copia"))}</button>`:""}
@@ -251,6 +266,7 @@ function vistaStato(){
   <button class="lnk" id="nuova" style="margin-top:12px">${esc(t("nuova"))}</button>`;
   programma();
 }
+function pushAttivo(){return store.get("tavolo-push-"+PID)==="1"&&(()=>{try{return Notification.permission==="granted"}catch(e){return false}})()}
 function programma(){clearTimeout(notifTimer);if(!P||P.stato!=="attesa"||P.conf==="confermata")return;const d=P.finestra-adesso();
   if(d<=0){avvisaOra();return}if(d<2147e6)notifTimer=setTimeout(()=>{disegna();avvisaOra()},d+500)}
 function avvisaOra(){if(notificato||!INFO.promemoria||!P||P.stato!=="attesa"||P.conf==="confermata")return;notificato=true;
@@ -277,6 +293,16 @@ document.addEventListener("click",async e=>{
     case"copia":{const u=linkMio();try{await navigator.clipboard.writeText(u);toast(t("copiato"))}catch(_){toast(u)}break}
     case"nuova":PID=PK=null;P=null;simula=false;notificato=false;try{history.replaceState(null,"",location.pathname+(LID?"?l="+encodeURIComponent(LID):""))}catch(_){}await avvio();window.scrollTo(0,0);break;
     case"ics":{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([ics()],{type:"text/calendar"}));a.download="prenotazione.ics";document.body.appendChild(a);a.click();a.remove();break}
+    case"inst":{if(installa){installa.prompt();try{await installa.userChoice}catch(_){}installa=null;disegna()}break}
+    case"pushOn":{b.disabled=true;let st="denied";try{st=await Notification.requestPermission()}catch(_){}
+      if(st!=="granted"){disegna();break}
+      try{const reg=await navigator.serviceWorker.register("prenota-sw.js");await navigator.serviceWorker.ready;
+        let sub=await reg.pushManager.getSubscription();const chiave=Uint8Array.from(atob(INFO.vapid.replace(/-/g,"+").replace(/_/g,"/")),c=>c.charCodeAt(0));
+        if(sub&&sub.options&&sub.options.applicationServerKey&&btoa(String.fromCharCode(...new Uint8Array(sub.options.applicationServerKey)))!==btoa(String.fromCharCode(...chiave))){await sub.unsubscribe();sub=null}
+        if(!sub)sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:chiave});
+        await BE.push(sub.toJSON());store.set("tavolo-push-"+PID,"1")}
+      catch(_){toast(t("pushNo"))}
+      disegna();break}
     case"notif":{let st="denied";try{st=await Notification.requestPermission()}catch(_){}
       const el=$("notifTxt");if(el)el.textContent=st==="granted"?t("notifOk",{h:hh(P.finestra)}):t("notifNo");if(st!=="granted"){b.hidden=true}programma();break}
   }

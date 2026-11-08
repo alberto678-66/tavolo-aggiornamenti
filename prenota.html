@@ -137,6 +137,16 @@ let installa=null;addEventListener("beforeinstallprompt",e=>{e.preventDefault();
 if("serviceWorker"in navigator&&TAVOLO_FB&&location.protocol==="https:")navigator.serviceWorker.register("prenota-sw.js").catch(()=>{});
 const MODO=LID&&TAVOLO_FB?"fb":"api";
 const urlDoc=d=>MODO==="fb"?`${d}.html?l=${encodeURIComponent(LID)}&lang=${lang}`:`/${d}.html`;
+
+// Aggiornamenti in tempo reale da Firebase (solo nella pagina su internet): ascolta i documenti e ridisegna appena cambiano.
+// Se la libreria non si carica (rete lenta, blocchi), la pagina continua con i controlli periodici.
+const FB_VIVO={pronto:null,db:null,carica(){if(this.pronto)return this.pronto;if(!TAVOLO_FB||!LID)return this.pronto=Promise.resolve(null);
+  const js=u=>new Promise((ok,ko)=>{const s=document.createElement("script");s.src=u;s.onload=ok;s.onerror=ko;document.head.appendChild(s)});
+  return this.pronto=js("https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js").then(()=>js("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js")).then(()=>{
+    const app=firebase.apps.length?firebase.app():firebase.initializeApp({apiKey:TAVOLO_FB.apiKey,projectId:TAVOLO_FB.progetto});this.db=app.firestore();return this.db}).catch(()=>null)},
+  async ascolta(percorso,fn){const db=await this.carica();if(!db)return null;try{return db.doc(percorso).onSnapshot(d=>{if(d.exists)fn(d.data())},()=>{})}catch(e){return null}}};
+const daSdk=o=>{const r={};for(const[k,v]of Object.entries(o||{}))r[k]=v&&typeof v.toDate==="function"?v.toDate().toISOString():v;return r};
+let vivoPren=false,ascoltata="";
 const FSB=TAVOLO_FB?`https://firestore.googleapis.com/v1/projects/${TAVOLO_FB.progetto}/databases/(default)/documents`:"";
 const fbEnc=v=>typeof v==="boolean"?{booleanValue:v}:Number.isInteger(v)?{integerValue:String(v)}:{stringValue:String(v??"")};
 const fbDec=f=>{const o={};for(const[k,v]of Object.entries(f||{}))o[k]="integerValue"in v?+v.integerValue:"booleanValue"in v?v.booleanValue:"timestampValue"in v?v.timestampValue:"arrayValue"in v?(v.arrayValue.values||[]).map(x=>fbDec({x}).x):v.stringValue??null;return o};
@@ -223,7 +233,7 @@ async function invia(){
   inviando=true;vistaForm();
   try{const j=await BE.nuova({nome,tel,data:sel.g,ora:sel.o,persone:sel.p,note:$("fNote").value,acc:$("fAcc").checked,privacy:true,salute:$("fSal").checked});
     store.set("tavolo-prenota-nome",nome);store.set("tavolo-prenota-tel",tel);
-    PID=j.id;PK=j.k;P=j.pren;salvaMia({id:j.id,k:j.k,data:sel.g,ora:sel.o});
+    PID=j.id;PK=j.k;P=j.pren;salvaMia({id:j.id,k:j.k,data:sel.g,ora:sel.o});setTimeout(ascoltaPren,0);
     try{history.replaceState(null,"",linkMio())}catch(e){}
     inviando=false;window.scrollTo(0,0);disegna();
   }catch(e){inviando=false;err={nome:t("eNome"),tel:t("eTel"),persone:t("ePers"),orario:t("eOra"),privacy:t("ePriv"),salute:t("eSal"),doppia:t("eDoppia"),chiuso:t("chiusoE")}[e.codice]||t("rete");if(e.codice==="orario")sel.o=null;vistaForm()}
@@ -311,7 +321,12 @@ document.addEventListener("click",async e=>{
       const el=$("notifTxt");if(el)el.textContent=st==="granted"?t("notifOk",{h:hh(P.finestra)}):t("notifNo");if(st!=="granted"){b.hidden=true}programma();break}
   }
 });
-avvio();setInterval(aggiorna,15000);
+// nella pagina su internet: stato della prenotazione e del locale in tempo reale
+let staccaPren=null,locAscoltato=false;
+function ascoltaPren(){if(MODO!=="fb"||!PID||ascoltata===PID)return;ascoltata=PID;const mio=PID;vivoPren=false;if(staccaPren){try{staccaPren()}catch(e){}staccaPren=null}
+  FB_VIVO.ascolta(`locali/${LID}/prenotazioni/${PID}`,d=>{if(PID!==mio)return;vivoPren=true;if(chiediDisdici)return;const prima=JSON.stringify(P);P=vistaFb(PID,daSdk(d));if(JSON.stringify(P)!==prima)disegna()}).then(u=>{if(PID===mio)staccaPren=u;else if(u)u()});
+  if(!locAscoltato){locAscoltato=true;FB_VIVO.ascolta(`locali/${LID}`,d=>{if(!INFO)return;const ora=INFO.ora;INFO=Object.assign({},INFO,daSdk(d),{ora});if(!chiediDisdici)disegna()})}}
+avvio().then(ascoltaPren);setInterval(()=>{ascoltaPren();if(!vivoPren||MODO!=="fb")aggiorna();else if(Date.now()-(window.__ultimoPren||0)>120000){window.__ultimoPren=Date.now();aggiorna()}},MODO==="fb"?15000:8000);
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)aggiorna()});
 </script>
 <script src="consenso.js" defer></script>

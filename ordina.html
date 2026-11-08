@@ -105,7 +105,16 @@ const FSB=TAVOLO_FB?`https://firestore.googleapis.com/v1/projects/${TAVOLO_FB.pr
 const fbDec=f=>{const o={};for(const[k,v]of Object.entries(f||{}))o[k]="integerValue"in v?+v.integerValue:"booleanValue"in v?v.booleanValue:"timestampValue"in v?v.timestampValue:v.stringValue??null;return o};
 async function fbChiedi(url,body){const r=await fetch(url+(url.includes("?")?"&":"?")+"key="+TAVOLO_FB.apiKey,body?{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)}:{cache:"no-store"});
   let j={};try{j=await r.json()}catch(e){}if(!r.ok){const e=new Error("rete");e.codice=r.status===404?"codice":r.status===403?"troppe":"rete";throw e}return j}
-let menuFb=null,menuOra=0,inAttesa=[];
+
+// Aggiornamenti in tempo reale da Firebase (solo nella pagina su internet): ascolta i documenti e ridisegna appena cambiano.
+// Se la libreria non si carica (rete lenta, blocchi), la pagina continua con i controlli periodici.
+const FB_VIVO={pronto:null,db:null,carica(){if(this.pronto)return this.pronto;if(!TAVOLO_FB||!LID)return this.pronto=Promise.resolve(null);
+  const js=u=>new Promise((ok,ko)=>{const s=document.createElement("script");s.src=u;s.onload=ok;s.onerror=ko;document.head.appendChild(s)});
+  return this.pronto=js("https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js").then(()=>js("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js")).then(()=>{
+    const app=firebase.apps.length?firebase.app():firebase.initializeApp({apiKey:TAVOLO_FB.apiKey,projectId:TAVOLO_FB.progetto});this.db=app.firestore();return this.db}).catch(()=>null)},
+  async ascolta(percorso,fn){const db=await this.carica();if(!db)return null;try{return db.doc(percorso).onSnapshot(d=>{if(d.exists)fn(d.data())},()=>{})}catch(e){return null}}};
+const daSdk=o=>{const r={};for(const[k,v]of Object.entries(o||{}))r[k]=v&&typeof v.toDate==="function"?v.toDate().toISOString():v;return r};
+let menuFb=null,menuOra=0,inAttesa=[],vivo=false;
 const BE={
   async menu(){if(MODO==="api")return chiedi(`/api/qr/menu?t=${encodeURIComponent(T)}&k=${encodeURIComponent(K)}`);
     const tav=fbChiedi(`${FSB}/locali/${LID}/tav/${encodeURIComponent(T+"_"+K)}`);
@@ -184,8 +193,13 @@ document.addEventListener("click",async e=>{
 });
 $("lang").addEventListener("change",e=>{lang=e.target.value;store.set("tavolo-ordina-lingua",lang);disegna()});
 let ultimoGiro=0;
-const ogni=()=>{if(MODO==="api")return 15000;const tr=D&&D.traccia&&D.traccia.righe||[],ric=D&&D.richieste||[];return tr.some(x=>x.stato!=="servito")||ric.some(r=>r.stato==="attesa")?20000:45000};
-carica();setInterval(()=>{if($("sh").innerHTML||document.hidden)return;if(Date.now()-ultimoGiro>=ogni()){ultimoGiro=Date.now();carica()}else if(D&&MODO==="fb"&&((D.traccia&&D.traccia.righe)||[]).some(x=>x.stato==="prep"))disegna()},5000);
+const ogni=()=>{if(MODO==="api")return 5000;if(vivo)return 120000;const tr=D&&D.traccia&&D.traccia.righe||[],ric=D&&D.richieste||[];return tr.some(x=>x.stato!=="servito")||ric.some(r=>r.stato==="attesa")?20000:45000};
+carica().then(()=>{if(MODO!=="fb")return;
+  FB_VIVO.ascolta(`locali/${LID}/tav/${T}_${K}`,d=>{vivo=true;if(!D)return;let tr={},ric=[];try{tr=JSON.parse(d.traccia||"{}");ric=JSON.parse(d.ric||"[]")}catch(e){}
+    inAttesa=inAttesa.filter(x=>Date.now()-x.ora<90000&&!ric.some(r=>r.tipo==="ordine"&&Math.abs(r.ora-x.ora)<120000));
+    Object.assign(D,{tavolo:d.nome||D.tavolo,aperto:d.aperto!==false,traccia:tr,richieste:ric.concat(inAttesa)});if(!$("sh").innerHTML)disegna()});
+  FB_VIVO.ascolta(`locali/${LID}/qr/menu`,d=>{try{const m=JSON.parse(d.m||"{}");if(!menuFb||JSON.stringify(m)!==JSON.stringify(menuFb)){menuFb=m;menuOra=Date.now();if(D){Object.assign(D,m);if(!$("sh").innerHTML)disegna()}}}catch(e){}})});
+setInterval(()=>{if($("sh").innerHTML||document.hidden)return;if(Date.now()-ultimoGiro>=ogni()){ultimoGiro=Date.now();carica()}else if(D&&MODO==="fb"&&((D.traccia&&D.traccia.righe)||[]).some(x=>x.stato==="prep"))disegna()},5000);
 document.addEventListener("visibilitychange",()=>{if(!document.hidden&&Date.now()-ultimoGiro>8000){ultimoGiro=Date.now();carica()}});
 </script>
 <script src="consenso.js" defer></script>
